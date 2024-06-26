@@ -7,27 +7,33 @@ import {
   SafeAreaView,
   Platform,
   StatusBar,
+  TextInput,
 } from "react-native";
 import WelcomeHeader from "../ui/WelcomeHeader";
+import colors from "../utils/colors";
+import FormInput from "../ui/FormInput";
 
 interface Props {}
 
 const SignIn: FC<Props> = (props) => {
   return (
     <SafeAreaView style={styles.container}>
-      <WelcomeHeader/>
+      <WelcomeHeader />
+      <View style={styles.formContainer}>
+        <FormInput placeholder="Email" keyboardType="email-address" autoCapitalize="none"/>
+        <FormInput placeholder="Password" secureTextEntry/>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+    padding: 15,
   },
-  image: {
-    width: 250,
-    height: 250,
+
+  formContainer: {
+    marginTop: 30,
   },
 });
 
