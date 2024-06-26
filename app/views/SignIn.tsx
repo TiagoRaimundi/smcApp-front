@@ -8,18 +8,14 @@ import {
   Platform,
   StatusBar,
 } from "react-native";
+import WelcomeHeader from "../ui/WelcomeHeader";
 
 interface Props {}
 
 const SignIn: FC<Props> = (props) => {
   return (
     <SafeAreaView style={styles.container}>
-      <Image
-        source={require("../../assets/hero.png")}
-        style={styles.image}
-        resizeMode="contain"
-        resizeMethod="resize"
-      />
+      <WelcomeHeader/>
     </SafeAreaView>
   );
 };
