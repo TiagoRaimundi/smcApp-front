@@ -11,18 +11,14 @@ import FormInput from "../ui/FormInput";
 import AppButton from "@ui/AppButton";
 import FormDivider from "@ui/FormDivider";
 import FormNavigator from "@ui/FormNavigator";
+import CustomKeyAvoidingView from "@ui/KeyboardAvoidingView";
 
 interface Props {}
 
 const SignUp: FC<Props> = (props) => {
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-      keyboardVerticalOffset={50}
-    >
-      <ScrollView>
-        <View style={styles.innerContainer}>
+    <CustomKeyAvoidingView>
+          <View style={styles.innerContainer}>
           <WelcomeHeader />
           <View style={styles.formContainer}>
           <FormInput
@@ -37,11 +33,11 @@ const SignUp: FC<Props> = (props) => {
 
             <AppButton title="Sign up" />
             <FormDivider />
+            
             <FormNavigator leftTitle="Forget Password" rigthTitle="Sign In" />
           </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+    </CustomKeyAvoidingView>
   );
 };
 
