@@ -9,13 +9,13 @@ import AppButton from "@ui/AppButton";
 import FormDivider from "@ui/FormDivider";
 import FormNavigator from "@ui/FormNavigator";
 import CustomKeyAvoidingView from "@ui/KeyboardAvoidingView";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { AuthStackParamList } from "app/navigator/AuthNavigator";
 
 interface Props {}
 
 const ForgetPassowrd: FC<Props> = (props) => {
-    const {navigate} = useNavigation()
-  return (
+  const {navigate} = useNavigation<NavigationProp<AuthStackParamList>>();  return (
     <CustomKeyAvoidingView>
       <View style={styles.innerContainer}>
         <WelcomeHeader />
