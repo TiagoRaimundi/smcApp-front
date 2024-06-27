@@ -2,8 +2,9 @@ import { FC } from "react";
 import {
   View,
   StyleSheet,
-  SafeAreaView,
-  Button,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import WelcomeHeader from "../ui/WelcomeHeader";
 import FormInput from "../ui/FormInput";
@@ -15,25 +16,39 @@ interface Props {}
 
 const SignIn: FC<Props> = (props) => {
   return (
-    <SafeAreaView style={styles.container}>
-      <WelcomeHeader />
-      <View style={styles.formContainer}>
-        <FormInput placeholder="Email" keyboardType="email-address" autoCapitalize="none"/>
-        <FormInput placeholder="Password" secureTextEntry/>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <ScrollView>
+        <View style={styles.innerContainer}>
+          <WelcomeHeader />
+          <View style={styles.formContainer}>
+            <FormInput
+              placeholder="Email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <FormInput placeholder="Password" secureTextEntry />
 
-        <AppButton title="Sign in"/>
-        <FormDivider/>
-        <FormNavigator leftTitle="Forget Password" rigthTitle="Sign In"/>
-      </View>
-    </SafeAreaView>
+            <AppButton title="Sign in" />
+            <FormDivider />
+            <FormNavigator leftTitle="Forget Password" rigthTitle="Sign In" />
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 15,
+    flex: 1,
   },
-
+  innerContainer: {
+    padding: 15,
+    flex: 1,
+  },
   formContainer: {
     marginTop: 30,
   },
