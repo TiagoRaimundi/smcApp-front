@@ -12,31 +12,38 @@ import AppButton from "@ui/AppButton";
 import FormDivider from "@ui/FormDivider";
 import FormNavigator from "@ui/FormNavigator";
 import CustomKeyAvoidingView from "@ui/KeyboardAvoidingView";
+import { useNavigation } from "@react-navigation/native";
 
-interface Props {}
+interface Props { }
 
 const SignUp: FC<Props> = (props) => {
+  const { navigate } = useNavigation()
   return (
     <CustomKeyAvoidingView>
-          <View style={styles.innerContainer}>
-          <WelcomeHeader />
-          <View style={styles.formContainer}>
+      <View style={styles.innerContainer}>
+        <WelcomeHeader />
+        <View style={styles.formContainer}>
           <FormInput
-              placeholder="Name"
-            />
-            <FormInput
-              placeholder="Email"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-            <FormInput placeholder="Password" secureTextEntry />
+            placeholder="Name"
+          />
+          <FormInput
+            placeholder="Email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          <FormInput placeholder="Password" secureTextEntry />
 
-            <AppButton title="Sign up" />
-            <FormDivider />
-            
-            <FormNavigator leftTitle="Forget Password" rigthTitle="Sign In" />
-          </View>
+          <AppButton title="Sign up" />
+          <FormDivider />
+
+          <FormNavigator
+            onLeftPress={() => navigate("ForgetPassword")}
+            onRightPress={() => navigate("SignIn")}
+            rigthTitle="Sign In"
+            leftTitle="Forget Password"
+          />
         </View>
+      </View>
     </CustomKeyAvoidingView>
   );
 };
