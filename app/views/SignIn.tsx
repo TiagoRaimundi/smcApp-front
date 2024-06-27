@@ -2,16 +2,13 @@ import { FC } from "react";
 import {
   View,
   StyleSheet,
-  Text,
-  Image,
   SafeAreaView,
-  Platform,
-  StatusBar,
-  TextInput,
+  Button,
 } from "react-native";
 import WelcomeHeader from "../ui/WelcomeHeader";
-import colors from "../utils/colors";
 import FormInput from "../ui/FormInput";
+import AppButton from "@ui/AppButton";
+import FormDivider from "@ui/FormDivider";
 
 interface Props {}
 
@@ -22,6 +19,9 @@ const SignIn: FC<Props> = (props) => {
       <View style={styles.formContainer}>
         <FormInput placeholder="Email" keyboardType="email-address" autoCapitalize="none"/>
         <FormInput placeholder="Password" secureTextEntry/>
+
+        <AppButton title="Sign in"/>
+        <FormDivider/>
       </View>
     </SafeAreaView>
   );
