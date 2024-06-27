@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -18,7 +18,14 @@ import { AuthStackParamList } from "app/navigator/AuthNavigator";
 interface Props { }
 
 const SignUp: FC<Props> = (props) => {
+  const [userInfo, setUserInfo] = useState({name: '', email: '', password: ''})
   const {navigate} = useNavigation<NavigationProp<AuthStackParamList>>();
+  const handleChange = (name: string) => (text: string) => setUserInfo({...userInfo, [name]: text});
+  const handleSubmit = ()=> {
+    console.log(userInfo);
+  }
+  
+  const {email, name, password} = userInfo
   return (
     <CustomKeyAvoidingView>
       <View style={styles.innerContainer}>
@@ -26,15 +33,19 @@ const SignUp: FC<Props> = (props) => {
         <View style={styles.formContainer}>
           <FormInput
             placeholder="Name"
+            value={name}
+            onChangeText={handleChange("name")}
           />
           <FormInput
             placeholder="Email"
             keyboardType="email-address"
             autoCapitalize="none"
+            value={email}
+            onChangeText={handleChange("email")}
           />
-          <FormInput placeholder="Password" secureTextEntry />
+          <FormInput placeholder="Password" secureTextEntry value={password}       onChangeText={handleChange("password")}/>
 
-          <AppButton title="Sign up" />
+          <AppButton title="Sign up" onPress={handleSubmit}/>
           <FormDivider />
 
           <FormNavigator
