@@ -9,6 +9,7 @@ import WelcomeHeader from "../ui/WelcomeHeader";
 import FormInput from "../ui/FormInput";
 import AppButton from "@ui/AppButton";
 import FormDivider from "@ui/FormDivider";
+import FormNavigator from "@ui/FormNavigator";
 
 interface Props {}
 
@@ -22,6 +23,7 @@ const SignIn: FC<Props> = (props) => {
 
         <AppButton title="Sign in"/>
         <FormDivider/>
+        <FormNavigator leftTitle="Forget Password" rigthTitle="Sign In"/>
       </View>
     </SafeAreaView>
   );
