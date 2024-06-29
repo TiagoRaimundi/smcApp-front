@@ -1,23 +1,18 @@
-import { FC, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-} from "react-native";
-import WelcomeHeader from "../ui/WelcomeHeader";
-import FormInput from "../ui/FormInput";
-import AppButton from "@ui/AppButton";
-import FormDivider from "@ui/FormDivider";
-import FormNavigator from "@ui/FormNavigator";
-import CustomKeyAvoidingView from "@ui/KeyboardAvoidingView";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
+import AppButton from "@ui/AppButton";
+
+import FormDivider from "@ui/FormDivider";
+import FormInput from "@ui/FormInput";
+import FormNavigator from "@ui/FormNavigator";
+import WelcomeHeader from "@ui/WelcomeHeader";
 import { AuthStackParamList } from "app/navigator/AuthNavigator";
-import * as yup from "yup";
-import axios from "axios";
+import { FC, useState } from "react";
+import { View, StyleSheet } from "react-native";
 import { newUserSchema, yupValidate } from "@utils/validator";
 import { runAxiosAsync } from "app/api/runAxiosAsync";
+import { showMessage } from "react-native-flash-message";
+import CustomKeyAvoidingView from "@ui/KeyboardAvoidingView";
+import axios from "axios";
 
 
 interface Props {}
@@ -28,24 +23,37 @@ const SignUp: FC<Props> = (props) => {
     email: "",
     password: "",
   });
+  const [busy, setBusy] = useState(false);
   const { navigate } = useNavigation<NavigationProp<AuthStackParamList>>();
-  const handleChange = (name: string) => (text: string) =>
+
+  const handleChange = (name: string) => (text: string) => {
     setUserInfo({ ...userInfo, [name]: text });
+  };
 
   const handleSubmit = async () => {
-    const {values, error} = await yupValidate(newUserSchema, userInfo);
-     const res = await runAxiosAsync<{message: string}>(axios.post(
+    const { values, error } = await yupValidate(newUserSchema, userInfo);
+
+    if (error) return showMessage({ message: error, type: "danger" });
+
+    setBusy(true);
+    const res = await runAxiosAsync<{message: string}>(axios.post(
       "http://192.168.3.172:8000/auth/sign-up",
       values
-    ))    
-   console.log(res)
+    ))   
+
+    if (res?.message) {
+      showMessage({ message: res.message, type: "success" });
+    }
+    setBusy(false);
   };
 
   const { email, name, password } = userInfo;
+
   return (
     <CustomKeyAvoidingView>
       <View style={styles.innerContainer}>
         <WelcomeHeader />
+
         <View style={styles.formContainer}>
           <FormInput
             placeholder="Name"
@@ -66,14 +74,15 @@ const SignUp: FC<Props> = (props) => {
             onChangeText={handleChange("password")}
           />
 
-          <AppButton title="Sign up" onPress={handleSubmit} />
+          <AppButton active={!busy} title="Sign Up" onPress={handleSubmit} />
+
           <FormDivider />
 
           <FormNavigator
             onLeftPress={() => navigate("ForgetPassword")}
             onRightPress={() => navigate("SignIn")}
-            rigthTitle="Sign In"
             leftTitle="Forget Password"
+            rigthTitle="Sign In"
           />
         </View>
       </View>
