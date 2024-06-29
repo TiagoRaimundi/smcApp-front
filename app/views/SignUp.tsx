@@ -17,6 +17,7 @@ import { AuthStackParamList } from "app/navigator/AuthNavigator";
 import * as yup from "yup";
 import axios from "axios";
 import { newUserSchema, yupValidate } from "@utils/validator";
+import { runAxiosAsync } from "app/api/runAxiosAsync";
 
 
 interface Props {}
@@ -32,33 +33,12 @@ const SignUp: FC<Props> = (props) => {
     setUserInfo({ ...userInfo, [name]: text });
 
   const handleSubmit = async () => {
-    try {
-      const {values, error} = await yupValidate(newUserSchema, userInfo);
-
-      if(error){
-        console.log(error)
-      }
-
-      if(values){
-        const { data } = await axios.post(
-          "http://192.168.3.172:8000/auth/sign-up",
-          values
-        );
-        console.log(data);
-      }
-    } catch (error) {
-     
-      
-  
-      if(error instanceof axios.AxiosError){
-        const response = error.response
-        if(response){
-          console.log('Invalid form: ', response.data.message)
-        }
-      }
-
-      console.log(( error as any).message)
-    }
+    const {values, error} = await yupValidate(newUserSchema, userInfo);
+     const res = await runAxiosAsync<{message: string}>(axios.post(
+      "http://192.168.3.172:8000/auth/sign-up",
+      values
+    ))    
+   console.log(res)
   };
 
   const { email, name, password } = userInfo;
