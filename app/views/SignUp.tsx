@@ -16,28 +16,9 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { AuthStackParamList } from "app/navigator/AuthNavigator";
 import * as yup from "yup";
 import axios from "axios";
+import { newUserSchema, yupValidate } from "@utils/validator";
 
-const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-const passwordRegex =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{6,}$/;
 
-yup.addMethod(yup.string, "email", function validateEmail(message) {
-  return this.matches(emailRegex, {
-    message,
-    name: "email",
-    excludeEmptyString: true,
-  });
-});
-
-export const newUserSchema = yup.object({
-  name: yup.string().required("Name is missing"),
-  email: yup.string().email("Invalid email!").required("Email is missing"),
-  password: yup
-    .string()
-    .required("Password is missing")
-    .matches(passwordRegex, "Password is too simple!")
-    .min(6, "Password should be at least 8 chars long!"),
-});
 interface Props {}
 
 const SignUp: FC<Props> = (props) => {
@@ -52,16 +33,23 @@ const SignUp: FC<Props> = (props) => {
 
   const handleSubmit = async () => {
     try {
-      const info = await newUserSchema.validate(userInfo);
-      const { data } = await axios.post(
-        "http://192.168.3.172:8000/auth/sign-up",
-        info
-      );
-      console.log(data);
-    } catch (error) {
-      if(error instanceof yup.ValidationError){
-        console.log('INvalid form: ', error.message)
+      const {values, error} = await yupValidate(newUserSchema, userInfo);
+
+      if(error){
+        console.log(error)
       }
+
+      if(values){
+        const { data } = await axios.post(
+          "http://192.168.3.172:8000/auth/sign-up",
+          values
+        );
+        console.log(data);
+      }
+    } catch (error) {
+     
+      
+  
       if(error instanceof axios.AxiosError){
         const response = error.response
         if(response){
